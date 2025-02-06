@@ -1,0 +1,95 @@
+{
+  "name": "compact-api",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Exygy",
+  "private": false,
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "nest build",
+    "db:migration:run": "yarn prisma migrate deploy",
+    "db:migration:skip": "yarn prisma migrate resolve --applied ",
+    "db:resetup": "psql -c 'DROP DATABASE IF EXISTS <insert db name here> WITH (FORCE);' && psql -c 'CREATE DATABASE <insert db name here>;' && psql -d <insert db name here> -c 'CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";'",
+    "db:seed:staging": "npx prisma db seed -- --environment staging",
+    "dev": "nest start --watch",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "generate:client": "ts-node scripts/generate-axios-client.ts && prettier -w ./types/backend-swagger.ts",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "setup": "yarn install && yarn prisma generate && yarn build && yarn db:resetup && yarn db:migration:run && yarn db:seed:staging",
+    "start": "nest start",
+    "start:prod": "node dist/src/main",
+    "test": "jest --config ./test/jest.config.js",
+    "test:cov": "yarn db:resetup && yarn db:migration:run && jest --config ./test/jest-with-coverage.config.js --logHeapUsage",
+    "test:cov-ci": "yarn db:migration:run && jest --config ./test/jest-with-coverage.config.js --runInBand --logHeapUsage",
+    "test:e2e": "yarn db:resetup && yarn db:migration:run && jest --config ./test/jest-e2e.config.js"
+  },
+  "dependencies": {
+    "@nestjs/axios": "~4.0.0",
+    "@nestjs/common": "~11.0.7",
+    "@nestjs/config": "~4.0.0",
+    "@nestjs/core": "~11.0.7",
+    "@nestjs/passport": "~11.0.5",
+    "@nestjs/platform-express": "~11.0.7",
+    "@nestjs/schedule": "~5.0.1",
+    "@nestjs/swagger": "~11.0.3",
+    "@nestjs/throttler": "~6.4.0",
+    "@prisma/client": "~6.3.1",
+    "axios": "~1.7.9",
+    "class-transformer": "~0.5.1",
+    "class-validator": "~0.14.1",
+    "dayjs": "~1.11.13",
+    "dd-trace": "~5.35.0",
+    "dotenv": "~16.4.7",
+    "express": "~4.21.2",
+    "node-polyglot": "~2.6.0",
+    "passport": "~0.7.0",
+    "prisma": "~6.3.1",
+    "reflect-metadata": "~0.2.2",
+    "rimraf": "~6.0.1",
+    "swagger-axios-codegen": "~0.16.14"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "~11.0.2",
+    "@nestjs/schematics": "~11.0.0",
+    "@nestjs/testing": "~11.0.7",
+    "@types/express": "~5.0.0",
+    "@types/jest": "~29.5.14",
+    "@types/node": "~22.13.1",
+    "@types/supertest": "~6.0.2",
+    "@typescript-eslint/eslint-plugin": "~8.23.0",
+    "@typescript-eslint/parser": "~8.23.0",
+    "eslint": "~9.19.0",
+    "eslint-config-prettier": "~10.0.1",
+    "eslint-plugin-prettier": "~5.2.3",
+    "jest": "~29.7.0",
+    "jest-mock-extended": "~4.0.0-beta1",
+    "prettier": "~3.4.2",
+    "supertest": "~7.0.0",
+    "ts-jest": "~29.2.5",
+    "ts-loader": "~9.5.2",
+    "ts-node": "~10.9.2",
+    "tsconfig-paths": "~4.2.0",
+    "typescript": "~5.7.3",
+    "webpack": "~5.97.1"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  }
+}
